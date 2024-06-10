@@ -38,6 +38,11 @@ windows
 .pub/
 /build/
 
+# Supabase related
+backend_code/supabase/.branches
+backend_code/supabase/.temp
+backend_code/supabase/.env
+
 # Symbolication related
 app.*.symbols
 
@@ -48,3 +53,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
