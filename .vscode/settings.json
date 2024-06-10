@@ -1,0 +1,25 @@
+{
+    // Hides files & folders
+    "files.exclude": { 
+      // Hide Irrelevant Platforms
+      "android": false, 
+      "ios": true,
+      "linux": true,
+      "macos": true,
+      "web": true,
+      "windows": true,
+
+      // Hide Flutter Configuration Files 
+      ".metadata": true,
+      ".dart_tool": true,
+      ".flutter-plugins":true,
+      ".flutter-plugins-dependencies":true,
+      "pubspec.lock": true,
+
+      // Hide IDE Configuration Files
+      ".idea": true,
+      "build": true,
+      "ancc_24_team_acre.iml":true,
+      "analysis_options.yaml":true,
+    }
+  }
