@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// import 'src/sample_login_screen.dart';
 import 'src/login_screen.dart';
 
 // Main Entry Point
@@ -36,7 +37,10 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
+      builder: (BuildContext context, GoRouterState state) => ChangeNotifierProvider(
+        create: (context) => LoginScreenState(),
+        child: const LoginScreen(),
+      ),
     ),
   ],
 );
