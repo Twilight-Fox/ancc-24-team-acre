@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 // import 'src/sample_login_screen.dart';
 import 'src/login_screen.dart';
+import 'src/signup_screen.dart';
 
 // Main Entry Point
 void main() async {
@@ -37,10 +38,11 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) => ChangeNotifierProvider(
-        create: (context) => LoginScreenState(),
-        child: const LoginScreen(),
-      ),
+      builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/signup',
+      builder: (BuildContext context, GoRouterState state) => const SignupScreen(),
     ),
   ],
 );
@@ -51,6 +53,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //return const MaterialApp(
+    //  title: 'Acre Numba Wan',
+    //  home: SignupScreen(),
+    //);
     return MaterialApp.router(
       routerConfig: _router,
     );

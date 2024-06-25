@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-
-class LoginScreenState with ChangeNotifier {}
+import 'package:go_router/go_router.dart';
 
 // Login Screen Widget, inherits from StatefulWidget
 class LoginScreen extends StatefulWidget {
@@ -220,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            print("Sign up function goes here");
+                            context.go('/signup');
                           },
                           child: const SizedBox(
                             width: 101,
@@ -247,8 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               backgroundColor:
                                   const Color.fromARGB(255, 255, 170, 0),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    44), // Rounded corners
+                                borderRadius: BorderRadius.circular(44),
                               ),
                             ),
                             onPressed: () {

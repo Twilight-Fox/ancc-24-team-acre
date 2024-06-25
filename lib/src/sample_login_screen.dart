@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Login Screen Widget, inherits from StatefulWidget
-class LoginScreen extends StatefulWidget{
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
     print('Email: $email, Password: $password');
   }
-  
+
   // Sample default login screen from FlutterViz
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0), 
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min, 
-              mainAxisAlignment: MainAxisAlignment.center, 
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -39,15 +39,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 24.0,
-                    color: Theme.of(context).colorScheme.onSurface, 
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 30.0), 
-                LoginTextField(hintText: "Email", controller: _emailController), // State (Variable)
-                const SizedBox(height: 16.0),
-                LoginTextField(hintText: "Password", obscureText: true, controller: _passwordController), // State (Variable)
                 const SizedBox(height: 30.0),
-                LoginButton(onPressed: () => {_handleLogin()}, text: "Login"), // State (Variable)
+                LoginTextField(
+                    hintText: "Email",
+                    controller: _emailController), // State (Variable)
+                const SizedBox(height: 16.0),
+                LoginTextField(
+                    hintText: "Password",
+                    obscureText: true,
+                    controller: _passwordController), // State (Variable)
+                const SizedBox(height: 30.0),
+                LoginButton(
+                    onPressed: () => {_handleLogin()},
+                    text: "Login"), // State (Variable)
                 const SizedBox(height: 16.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -58,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 14.0,
-                        color: Colors.black, // Use Colors class for common colors
+                        color:
+                            Colors.black, // Use Colors class for common colors
                       ),
                     ),
                     const SizedBox(width: 4.0),
@@ -90,7 +98,11 @@ class LoginTextField extends StatelessWidget {
   final bool obscureText;
   final TextEditingController controller;
 
-  const LoginTextField({super.key, required this.hintText, this.obscureText = false, required this.controller});
+  const LoginTextField(
+      {super.key,
+      required this.hintText,
+      this.obscureText = false,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +142,7 @@ class LoginTextField extends StatelessWidget {
       ),
     );
   }
-}  
+}
 
 class LoginButton extends StatelessWidget {
   final String text;
@@ -162,4 +174,3 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
-
