@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -10,6 +13,23 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final _searchController = TextEditingController();
+
+  Future<void> _handleScanURL() async {
+    final URL = _searchController.text;
+    final supabase = context.read<SupabaseState>().supabase;
+    final userID = context.read<SupabaseState>().userID;
+    //print('Search: $URL\nuserID: $userID');
+    try {
+      await supabase
+          .from('url_scan_results')
+          .insert({'user_id': userID, 'url_link': URL});
+      context.go('/real_time_scanning_and_security_check/scanning');
+    } catch (e) {
+      print('Error: $e');
+      return;
+    }
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +82,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         width: 244,
                         height: 44,
                         child: TextFormField(
-                          controller: _searchController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(17.13),
@@ -77,27 +96,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Positioned(
                     left: 14,
                     top: 247.85,
-                    child: Container(
+                    child: SizedBox(
                       width: 277.94,
-                      height: 40.30,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFF9F9F9),
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 2.78, color: Color(0xFFFFAB00)),
-                          borderRadius: BorderRadius.circular(61.15),
-                        ),
-                      ),
+                      height: 40.3,
+                      child: TextFormField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xFFF9F9F9),
+                            hintText: 'Enter URL to scan',
+                            hintStyle: const TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 16.68,
+                                fontWeight: FontWeight.w400),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  width: 2.78, color: Color(0xFFFFAB00)),
+                              borderRadius: BorderRadius.circular(61.15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  width: 2.78, color: Color(0xFFFFAB00)),
+                              borderRadius: BorderRadius.circular(61.15),
+                            ),
+                            contentPadding: const EdgeInsets.only(
+                                top: 3, bottom: 3, left: 15),
+                          ),
+                          style: const TextStyle(
+                              fontFamily: "Inter", fontSize: 16.0)),
                     ),
                   ),
+
+                  const Positioned(
+                      left: 259,
+                      top: 254.85,
+                      child: Image(
+                          image:
+                              AssetImage('assets/images/historyButton.png'))),
 
                   // Real-Time Scan & Security Check
                   Positioned(
                       left: 303.06,
-                      top: 247.85,
+                      top: 243.85,
                       child: ElevatedButton(
                         onPressed: () {
-                          print("scan function goes here");
+                          _handleScanURL();
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -110,9 +153,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: const Text('Scan',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14.55,
+                              fontSize: 16.68,
                               fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w900,
                               height: 0,
                             )),
                       )),

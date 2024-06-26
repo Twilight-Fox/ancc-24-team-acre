@@ -22,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _handleLogin() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    final supabase = Provider.of<SupabaseState>(context, listen: false).supabase;
+    final supabase =
+        Provider.of<SupabaseState>(context, listen: false).supabase;
     try {
       await supabase.auth.signInWithPassword(email: email, password: password);
       await Future.delayed(Duration.zero);

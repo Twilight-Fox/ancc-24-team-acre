@@ -26,7 +26,7 @@ class SplashScreenState extends State<SplashScreen> {
     final supabase =
         Provider.of<SupabaseState>(context, listen: false).supabase;
     final session = supabase.auth.currentSession;
-    print('Session: $session');
+    // print('Session: $session');
     if (session == null) {
       if (mounted) {
         context.go('/login');
