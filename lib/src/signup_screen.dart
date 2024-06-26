@@ -270,15 +270,15 @@ class SignupScreen extends StatelessWidget {
 
         // Checkbox
         Positioned(
-            top: 679.597412109375,
-            left: 14.359619140625,
-            child: Checkbox(
-              value: false,
-              onChanged: (bool? value) {
-          // Handle checkbox value change here
-              },
-            ),
+          top: 679.597412109375,
+          left: 14.359619140625,
+          child: Checkbox(
+            value: false,
+            onChanged: (bool? value) {
+              // Handle checkbox value change here
+            },
           ),
+        ),
 
         // Terms and Conditions
         const Positioned(
@@ -322,7 +322,7 @@ class SignupScreen extends StatelessWidget {
             )),
 
         Positioned(
-          top:780.3333740234375,
+          top: 780.3333740234375,
           right: 26.75,
           child: SizedBox(
             width: 160,
@@ -352,7 +352,6 @@ class SignupScreen extends StatelessWidget {
             ),
           ),
         ),
-          
       ]),
     );
   }

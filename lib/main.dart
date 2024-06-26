@@ -7,6 +7,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'src/sample_login_screen.dart';
 import 'src/login_screen.dart';
 import 'src/signup_screen.dart';
+import 'src/dashboard_screen.dart';
+import 'src/settings_screen.dart';
+import 'src/profile_screen.dart';
 
 // Main Entry Point
 void main() async {
@@ -43,6 +46,15 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/signup',
       builder: (BuildContext context, GoRouterState state) => const SignupScreen(),
+    ),
+    GoRoute(path: '/dashboard',
+      builder: (BuildContext context, GoRouterState state) => const DashboardScreen(),
+    ),
+    GoRoute(path: '/settings',
+      builder: (BuildContext context, GoRouterState state) => const SettingsScreen(),
+    ),
+    GoRoute(path: "/profile",
+      builder: (BuildContext context, GoRouterState state) => const ProfileScreen(),  
     ),
   ],
 );

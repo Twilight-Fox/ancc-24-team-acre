@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text;
     final password = _passwordController.text;
     print('Email: $email, Password: $password, Stay Signed in: $_isChecked');
+    context.go('/dashboard');
   }
 
   @override
