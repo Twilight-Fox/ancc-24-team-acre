@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../main.dart';
 
@@ -18,18 +20,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final URL = _searchController.text;
     final supabase = context.read<SupabaseState>().supabase;
     final userID = context.read<SupabaseState>().userID;
-    //print('Search: $URL\nuserID: $userID');
+    
+    const denoURL='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
+    const anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
+
+    final response = await http.post(Uri.parse(denoURL), headers: {"Authorization": "Bearer $anonKey", "Content-Type": "application/json"}, body: json.encode({"userID": userID, "url": URL}, ));
+    final sanitisedURL = response.body;
+    
     try {
+      json.decode(sanitisedURL)['error'];
+      return;
+    } catch (e) {
+      try {
       await supabase
           .from('url_scan_results')
           .insert({'user_id': userID, 'url_link': URL});
       context.go('/real_time_scanning_and_security_check/scanning');
+      return;
     } catch (e) {
       print('Error: $e');
       return;
     }
-    
   }
+}
 
   @override
   Widget build(BuildContext context) {
