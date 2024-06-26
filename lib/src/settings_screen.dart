@@ -175,8 +175,6 @@ class SettingsScreen extends StatelessWidget {
                       color: Color.fromRGBO(0, 0, 0, 1),
                       fontFamily: 'Inter',
                       fontSize: 22.833332061767578,
-                      letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
                       fontWeight: FontWeight.w900,
                       height: 1),
                 )),

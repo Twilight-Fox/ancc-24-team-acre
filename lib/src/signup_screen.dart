@@ -1,9 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
-class SignupScreen extends StatelessWidget {
+import '../main.dart';
+
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  bool? _isChecked = false;
+
+  Future<void> _handleLogin() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      // Show error message
+      return;
+    }
+    final name = '${_firstNameController.text} ${_lastNameController.text}';
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final supabase = context.read<SupabaseState>().supabase;
+    await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: <String, String>{'full_name': name});
+    await Future.delayed(Duration.zero);
+    context.go('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +159,14 @@ class SignupScreen extends StatelessWidget {
             )),
 
         // First Name
-        const Positioned(
+        Positioned(
           top: 342.3333740234375,
           left: 29.359619140625,
           child: SizedBox(
             width: 162,
             child: TextField(
-              decoration: InputDecoration(
+              controller: _firstNameController,
+              decoration: const InputDecoration(
                 labelText: 'First Name',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(82, 80, 80, 1),
@@ -152,13 +186,14 @@ class SignupScreen extends StatelessWidget {
         ),
 
         // Last Name
-        const Positioned(
+        Positioned(
           top: 342.3333740234375,
           left: 219.976318359375,
           child: SizedBox(
             width: 162,
             child: TextField(
-              decoration: InputDecoration(
+              controller: _lastNameController,
+              decoration: const InputDecoration(
                 labelText: 'Last Name',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(82, 80, 80, 1),
@@ -178,13 +213,14 @@ class SignupScreen extends StatelessWidget {
         ),
 
         // Email
-        const Positioned(
+        Positioned(
           top: 427.03564453125,
           left: 29.359619140625,
           child: SizedBox(
             width: 252,
             child: TextField(
-              decoration: InputDecoration(
+              controller: _emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(82, 80, 80, 1),
@@ -204,13 +240,15 @@ class SignupScreen extends StatelessWidget {
         ),
 
         // Password
-        const Positioned(
+        Positioned(
           top: 515.465576171875,
           left: 29.359619140625,
           child: SizedBox(
             width: 355.56,
             child: TextField(
-              decoration: InputDecoration(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
                 labelText: 'Password',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(82, 80, 80, 1),
@@ -230,13 +268,15 @@ class SignupScreen extends StatelessWidget {
         ),
 
         // Confirm Password
-        const Positioned(
+        Positioned(
           top: 605.03564453125,
           left: 29.359619140625,
           child: SizedBox(
             width: 355.56,
             child: TextField(
-              decoration: InputDecoration(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: const InputDecoration(
                 labelText: 'Confirm Password',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(82, 80, 80, 1),
@@ -273,11 +313,12 @@ class SignupScreen extends StatelessWidget {
           top: 679.597412109375,
           left: 14.359619140625,
           child: Checkbox(
-            value: false,
-            onChanged: (bool? value) {
-              // Handle checkbox value change here
-            },
-          ),
+              value: _isChecked,
+              onChanged: (bool? newValue) {
+                setState(() {
+                  _isChecked = newValue;
+                });
+              }),
         ),
 
         // Terms and Conditions
@@ -303,7 +344,7 @@ class SignupScreen extends StatelessWidget {
             left: 41.75,
             child: InkWell(
               onTap: () {
-                context.go('/');
+                context.go('/login');
               },
               child: const Text(
                 'Login',
@@ -336,7 +377,7 @@ class SignupScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                print("Sign up function goes here");
+                _handleLogin();
               },
               child: const Text(
                 'Sign Up',

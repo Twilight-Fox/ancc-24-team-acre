@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+
+import '../main.dart';
 
 // Login Screen Widget, inherits from StatefulWidget
 class LoginScreen extends StatefulWidget {
@@ -16,11 +19,18 @@ class _LoginScreenState extends State<LoginScreen> {
   bool? _isChecked = false;
 
   // Function to print email and password
-  void _handleLogin() {
+  Future<void> _handleLogin() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    print('Email: $email, Password: $password, Stay Signed in: $_isChecked');
-    context.go('/dashboard');
+    final supabase = Provider.of<SupabaseState>(context, listen: false).supabase;
+    try {
+      await supabase.auth.signInWithPassword(email: email, password: password);
+      await Future.delayed(Duration.zero);
+      context.go('/dashboard');
+    } catch (e) {
+      print(e);
+      return;
+    }
   }
 
   @override
