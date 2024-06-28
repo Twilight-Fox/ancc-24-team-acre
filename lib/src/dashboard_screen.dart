@@ -1,3 +1,4 @@
+import 'package:ancc_24_team_acre/src/real_time_scanning_and_security_check/scanning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -20,34 +21,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final URL = _searchController.text;
     final supabase = context.read<SupabaseState>().supabase;
     final userID = context.read<SupabaseState>().userID;
-    
-    const denoURL='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
-    const anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
 
-    final response = await http.post(Uri.parse(denoURL), headers: {"Authorization": "Bearer $anonKey", "Content-Type": "application/json"}, body: json.encode({"url": URL}));
+    const denoURL =
+        'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
+    const scanURL =
+        'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_url';
+    const anonKey =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
+
+    var response = await http.post(Uri.parse(denoURL),
+        headers: {
+          "Authorization": "Bearer $anonKey",
+          "Content-Type": "application/json"
+        },
+        body: json.encode({"url": URL}));
     final sanitisedURL = response.body;
-    
+
     try {
       json.decode(sanitisedURL)['error'];
       return;
     } catch (e) {
       try {
-      const scanURL='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_url';
-      final response = await http.post(Uri.parse(scanURL), headers: {"Authorization": "Bearer $anonKey", "Content-Type": "application/json"}, body: json.encode({"url": URL}));
-      final data = json.decode(response.body);
-      final rating = data['IPScannerRating'];
-      final description = data['IPScannerDescription'];
-      await supabase
-          .from('url_scan_results')
-          .insert({'user_id': userID, 'url_link': URL, 'ip_quality_rating': rating, 'ip_quality_description': description, 'status': true});
-      context.go('/real_time_scanning_and_security_check/scanning');
-      return;
-    } catch (e) {
-      print('Error: $e');
-      return;
+        // Scan URL with APIs
+        final promise = http.post(Uri.parse(scanURL),
+            headers: {
+              "Authorization": "Bearer $anonKey",
+              "Content-Type": "application/json"
+            },
+            body: json.encode({"url": URL}));
+        // Push Loading Screen while API is being called
+        await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const ScanningScreen()));
+
+        // Ensure API call is completed
+        response = await promise;
+        final data = json.decode(response.body);
+        final rating = data['IPScannerRating'].toString();
+        final description = data['IPScannerDescription'].toString();
+
+        // Call appropriate screen based on the rating
+        if (rating == 'Secure') {
+          context.go('/real_time_scanning_and_security_check/secure');
+        } else {
+          context.go('/real_time_scanning_and_security_check/insecure',
+              extra: {'rating': rating, 'description': description});
+        }
+
+        // Insert into database
+        await supabase.from('url_scan_results').insert({
+          'user_id': userID,
+          'url_link': URL,
+          'ip_quality_rating': rating,
+          'ip_quality_description': description,
+          'status': true
+        });
+
+        print('Rating: $rating');
+        return;
+      } catch (e) {
+        print('Error: $e');
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {

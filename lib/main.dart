@@ -15,6 +15,9 @@ import 'src/settings_screen.dart';
 import 'src/profile_screen.dart';
 import 'src/breach_scan/breach_scan_dashboard.dart';
 import 'src/real_time_scanning_and_security_check/scanning_screen.dart';
+import 'src/real_time_scanning_and_security_check/secure_screen.dart';
+import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
+import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
 
 // Main Entry Point
 Future<void> main() async {
@@ -29,9 +32,7 @@ Future<void> main() async {
 
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => SupabaseState())
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => SupabaseState())],
       child: const MainApp(),
     ),
   );
@@ -44,34 +45,38 @@ class SupabaseState extends ChangeNotifier {
   User? user;
   String? userID;
 
-  SupabaseState(){ authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-    final AuthChangeEvent event = data.event;
-    final Session? session = data.session;
+  SupabaseState() {
+    authSubscription =
+        Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
 
-    print('event: $event, session: $session');
+      print('event: $event, session: $session');
 
-    switch(event){
-      case AuthChangeEvent.signedIn:
-        user = session?.user;
-        break;
-      case AuthChangeEvent.signedOut:
-        user = null;
-        break;  
-      case AuthChangeEvent.userUpdated:
-        user = session?.user;
-        break;
-      case AuthChangeEvent.userDeleted:
-        user = null;
-        break;
-      default:
-        break;
-    }
+      switch (event) {
+        case AuthChangeEvent.signedIn:
+          user = session?.user;
+          break;
+        case AuthChangeEvent.signedOut:
+          user = null;
+          break;
+        case AuthChangeEvent.userUpdated:
+          user = session?.user;
+          break;
+        case AuthChangeEvent.userDeleted:
+          user = null;
+          break;
+        default:
+          break;
+      }
 
-    user = supabase.auth.currentUser; 
-    // print(user);
-    userID = user?.id;
-    // print(userID);
-  });}}
+      user = supabase.auth.currentUser;
+      // print(user);
+      userID = user?.id;
+      // print(userID);
+    });
+  }
+}
 
 // Manage Screen Navigation Here
 final GoRouter _router = GoRouter(
@@ -111,10 +116,31 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) =>
           const BreachScanDashboardScreen(),
     ),
-    GoRoute(path: '/real_time_scanning_and_security_check/scanning',
-      builder: (BuildContext context, GoRouterState state) =>
-          const ScanningScreen(),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/scanning',
+      builder: (BuildContext context, GoRouterState state) {
+        return const ScanningScreen();
+      },
     ),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/secure',
+      builder: (BuildContext context, GoRouterState state) {
+        return const SecureScreen();
+      },
+    ),
+    GoRoute(
+        path: '/real_time_scanning_and_security_check/insecure',
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as Map<String, String>;
+          final rating = data['rating'] ?? '';
+          final description = data['description'] ?? '';
+          return InsecureScreen(rating: rating, description: description);
+        }),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/threat_details',
+      builder: (BuildContext context, GoRouterState state) =>
+          const ThreatDetailsScreen(),
+    )
   ],
 );
 
