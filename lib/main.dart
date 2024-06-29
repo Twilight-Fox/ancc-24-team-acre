@@ -26,6 +26,7 @@ import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
 import 'src/jailbreak_detection/jailbreak_request_screen.dart';
 import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
 import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
+import 'src/qr_scan/screenshot.dart';
 
 // Main Entry Point
 Future<void> main() async {
@@ -184,7 +185,12 @@ final GoRouter _router = GoRouter(
       path: '/jailbreak_detection/insecure',
       builder: (BuildContext context, GoRouterState state) =>
           const JailbreakScanInsecureScreen(),
-    )
+    ),
+    GoRoute(
+      path: '/qr_scan',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BarcodeScannerWithZoom(),
+    ),
   ],
 );
 

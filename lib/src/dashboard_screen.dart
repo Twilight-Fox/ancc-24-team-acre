@@ -27,7 +27,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return;
     }
     else {
-      //context.go('/qr_scan');
+      var imageStatus = await Permission.photos.request();
+      if (imageStatus.isDenied){
+        return;
+      }
+      else {
+      context.go('/qr_scan');
+      }
     }
   }
 
