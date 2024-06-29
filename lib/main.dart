@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,24 +15,33 @@ import 'src/dashboard_screen.dart';
 import 'src/settings_screen.dart';
 import 'src/profile_screen.dart';
 import 'src/breach_scan/breach_scan_dashboard.dart';
+import 'src/breach_scan/breach_scan_input_screen.dart';
+import 'src/breach_scan/breach_scan_secure_screen.dart';
+import 'src/breach_scan/breach_scan_insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/scanning_screen.dart';
+import 'src/real_time_scanning_and_security_check/secure_screen.dart';
+import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
+import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
+import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
+import 'src/jailbreak_detection/jailbreak_request_screen.dart';
+import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
+import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
 
 // Main Entry Point
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await dotenv.load();
+  
   // Initialise Supabase
   await Supabase.initialize(
     url: 'https://fuewnvhcjyzstbyhyxzh.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ',
   );
-
+  
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => SupabaseState())
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => SupabaseState())],
       child: const MainApp(),
     ),
   );
@@ -44,34 +54,38 @@ class SupabaseState extends ChangeNotifier {
   User? user;
   String? userID;
 
-  SupabaseState(){ authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-    final AuthChangeEvent event = data.event;
-    final Session? session = data.session;
+  SupabaseState() {
+    authSubscription =
+        Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
 
-    print('event: $event, session: $session');
+      //print('event: $event, session: $session');
 
-    switch(event){
-      case AuthChangeEvent.signedIn:
-        user = session?.user;
-        break;
-      case AuthChangeEvent.signedOut:
-        user = null;
-        break;  
-      case AuthChangeEvent.userUpdated:
-        user = session?.user;
-        break;
-      case AuthChangeEvent.userDeleted:
-        user = null;
-        break;
-      default:
-        break;
-    }
+      switch (event) {
+        case AuthChangeEvent.signedIn:
+          user = session?.user;
+          break;
+        case AuthChangeEvent.signedOut:
+          user = null;
+          break;
+        case AuthChangeEvent.userUpdated:
+          user = session?.user;
+          break;
+        case AuthChangeEvent.userDeleted:
+          user = null;
+          break;
+        default:
+          break;
+      }
 
-    user = supabase.auth.currentUser; 
-    // print(user);
-    userID = user?.id;
-    // print(userID);
-  });}}
+      user = supabase.auth.currentUser;
+      // print(user);
+      userID = user?.id;
+      // print(userID);
+    });
+  }
+}
 
 // Manage Screen Navigation Here
 final GoRouter _router = GoRouter(
@@ -111,10 +125,66 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) =>
           const BreachScanDashboardScreen(),
     ),
-    GoRoute(path: '/real_time_scanning_and_security_check/scanning',
+    GoRoute(
+      path: '/breach_scan/input',
       builder: (BuildContext context, GoRouterState state) =>
-          const ScanningScreen(),
+          const BreachScanInputScreen(),
     ),
+    GoRoute(
+      path: '/breach_scan/secure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BreachScanSecureScreen(),
+    ),
+    GoRoute(
+      path: '/breach_scan/insecure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BreachScanInsecureScreen(),
+    ),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/scanning',
+      builder: (BuildContext context, GoRouterState state) {
+        return const ScanningScreen();
+      },
+    ),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/secure',
+      builder: (BuildContext context, GoRouterState state) {
+        return const SecureScreen();
+      },
+    ),
+    GoRoute(
+        path: '/real_time_scanning_and_security_check/insecure',
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as Map<String, String>;
+          final rating = data['rating'] ?? '';
+          final description = data['description'] ?? '';
+          return InsecureScreen(rating: rating, description: description);
+        }),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/threat_details',
+      builder: (BuildContext context, GoRouterState state) =>
+          const ThreatDetailsScreen(),
+    ),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/scan_history',
+      builder: (BuildContext context, GoRouterState state) =>
+          const ScanHistoryScreen(),
+    ),
+    GoRoute(
+      path: '/jailbreak_detection/confirm',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakRequestScreen(),
+    ),
+    GoRoute(
+      path: '/jailbreak_detection/secure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakScanSecureScreen(),
+    ),
+    GoRoute(
+      path: '/jailbreak_detection/insecure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakScanInsecureScreen(),
+    )
   ],
 );
 

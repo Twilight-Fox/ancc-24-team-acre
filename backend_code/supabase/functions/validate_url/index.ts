@@ -4,7 +4,6 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import "https://esm.sh/v135/@supabase/functions-js@2.4.1/src/edge-runtime.d.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 
 function _isValidUrl(urlString: string): string {
   let correctedUrlString = urlString;
@@ -35,15 +34,15 @@ function _isValidUrl(urlString: string): string {
 }
 
 Deno.serve(async (req) => {
-  const { userID, url } = await req.json()
-  const authHeader = req.headers.get('Authorization')!
-  const supabaseClient = createClient(
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-    { global: { headers: { Authorization: authHeader } } }
-  )
+  const { url } = await req.json()
+  //const authHeader = req.headers.get('Authorization')!
+  //const supabaseClient = createClient(
+  //  Deno.env.get('SUPABASE_URL') ?? '',
+  //  Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+  //  { global: { headers: { Authorization: authHeader } } }
+ // )
   const URL = _isValidUrl(url);
-  console.log(supabaseClient);
+  // console.log(supabaseClient);
 
   if (URL == '') {
     return new Response(JSON.stringify({ error: "Invalid URL" }), {
@@ -52,24 +51,8 @@ Deno.serve(async (req) => {
     });
   }
 
-  //console.log("Supabase URL: " + Deno.env.get('SUPABASE_URL') ?? '',
-  //  "\nSupabase Anon Key: " + Deno.env.get('SUPABASE_ANON_KEY') ?? '')
-  //console.log("Auth Header: " + authHeader)
-  //console.log(userID, URL)
-
-  // const token = authHeader.replace('Bearer ', '')
-  // const { data } = await supabaseClient.auth.getUser(token)
-  // const user = data.user
-  // console.log("Data: ", data)
-
-  //try{
-  //  await supabaseClient
-  //    .from('url_scan_results')
-  //    .insert({'user_id': userID, 'url_link': URL});
-  //  console.log('Inserted URL into the database');
-  //} catch (error) {
-  //  console.log(error);
-  //}
+  //const IPScannerData = await _IPScannerAPI(URL);
+  //console.log(IPScannerData);
 
   return new Response(JSON.stringify(URL), {
     headers: { "Content-Type": "application/json" },

@@ -15,8 +15,9 @@ class _ScanningScreenState extends State<ScanningScreen> {
   void initState() {
     print("screen called");
     super.initState();
-    Future.delayed(const Duration(seconds: 2), (){
+    Future.delayed(const Duration(seconds: 2), () {
       print('2 seconds later');
+      Navigator.of(context).pop();
     });
   }
 
@@ -50,7 +51,6 @@ class _ScanningScreenState extends State<ScanningScreen> {
                           image: AssetImage('assets/images/scanIcon.png'),
                           fit: BoxFit.fitWidth),
                     ))),
-      
             const Positioned(
                 top: 483.50830078125,
                 left: 122,
@@ -64,13 +64,11 @@ class _ScanningScreenState extends State<ScanningScreen> {
                       fontWeight: FontWeight.w900,
                       height: 1),
                 )),
-      
             Positioned(
                 top: 526.783203125,
                 left: 177.533203125,
                 child: LoadingAnimationWidget.waveDots(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  size: 60)),
+                    color: Color.fromARGB(255, 255, 255, 255), size: 60)),
           ])),
     );
   }

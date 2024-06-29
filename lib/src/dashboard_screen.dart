@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../main.dart';
+import 'real_time_scanning_and_security_check/scanning_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,33 +19,84 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final _searchController = TextEditingController();
 
+  
+  Future<void> _handleScanQR() async {
+    //final supabase = context.read<SupabaseState>().supabase;
+    var status = await Permission.camera.request();
+    if (status.isDenied){
+      return;
+    }
+    else {
+      //context.go('/qr_scan');
+    }
+  }
+
   Future<void> _handleScanURL() async {
     final URL = _searchController.text;
     final supabase = context.read<SupabaseState>().supabase;
     final userID = context.read<SupabaseState>().userID;
-    
-    const denoURL='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
-    const anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
 
-    final response = await http.post(Uri.parse(denoURL), headers: {"Authorization": "Bearer $anonKey", "Content-Type": "application/json"}, body: json.encode({"userID": userID, "url": URL}, ));
+    const denoURL =
+        'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
+    const scanURL =
+        'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_url';
+    const anonKey =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
+
+    var response = await http.post(Uri.parse(denoURL),
+        headers: {
+          "Authorization": "Bearer $anonKey",
+          "Content-Type": "application/json"
+        },
+        body: json.encode({"url": URL}));
     final sanitisedURL = response.body;
-    
+
     try {
       json.decode(sanitisedURL)['error'];
       return;
     } catch (e) {
       try {
-      await supabase
-          .from('url_scan_results')
-          .insert({'user_id': userID, 'url_link': URL});
-      context.go('/real_time_scanning_and_security_check/scanning');
-      return;
-    } catch (e) {
-      print('Error: $e');
-      return;
+        // Scan URL with APIs
+        final promise = http.post(Uri.parse(scanURL),
+            headers: {
+              "Authorization": "Bearer $anonKey",
+              "Content-Type": "application/json"
+            },
+            body: json.encode({"url": URL}));
+        // Push Loading Screen while API is being called
+        await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const ScanningScreen()));
+
+        // Ensure API call is completed
+        response = await promise;
+        final data = json.decode(response.body);
+        final rating = data['IPScannerRating'].toString();
+        final description = data['IPScannerDescription'].toString();
+
+        // Call appropriate screen based on the rating
+        if (rating == 'Secure') {
+          context.go('/real_time_scanning_and_security_check/secure');
+        } else {
+          context.go('/real_time_scanning_and_security_check/insecure',
+              extra: {'rating': rating, 'description': description});
+        }
+
+        // Insert into database
+        await supabase.from('url_scan_results').insert({
+          'user_id': userID,
+          'url_link': URL,
+          'ip_quality_rating': rating,
+          'ip_quality_description': description,
+          'status': true
+        });
+
+        //print('Rating: $rating');
+        return;
+      } catch (e) {
+        print('Error: $e');
+        }
+      }
     }
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: const BoxDecoration(color: Color(0xFFFFAB00)),
               child: Stack(
                 children: [
+                  // White Rounded Background
                   Positioned(
                     left: 0,
                     top: 139,
@@ -73,6 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Bottom Naviagtion Bar
                   Positioned(
                     left: -2,
                     top: 770,
@@ -88,6 +144,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Search Text Form Field
                   Positioned(
                       left: 24,
                       top: 59,
@@ -98,14 +155,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(17.13),
+                              borderSide: BorderSide.none,
                             ),
                             labelText: 'Search',
+                            labelStyle: const TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 17.13,
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(210, 210, 210, 1)),
                             fillColor: Colors.white,
                             filled: true,
                           ),
                         ),
                       )),
 
+                  // Real-Time Scan & Security Check Text Form Field
                   Positioned(
                     left: 14,
                     top: 247.85,
@@ -140,14 +204,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
-                  const Positioned(
+                  // Scan History Button
+                  Positioned(
                       left: 259,
                       top: 254.85,
-                      child: Image(
-                          image:
-                              AssetImage('assets/images/historyButton.png'))),
+                      child: InkWell(
+                        onTap: () {
+                          context.go(
+                              '/real_time_scanning_and_security_check/scan_history');
+                        },
+                        child: const Image(
+                            image:
+                                AssetImage('assets/images/historyButton.png')),
+                      )),
 
-                  // Real-Time Scan & Security Check
+                  // Real-Time Scan & Security Check Button
                   Positioned(
                       left: 303.06,
                       top: 243.85,
@@ -173,6 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             )),
                       )),
 
+                  // Real-Time Scan & Security Check Label
                   const Positioned(
                     left: 26,
                     top: 221,
@@ -279,7 +351,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     top: 534.91,
                     child: InkWell(
                       onTap: () {
-                        print("Jailbreak Icon pressed");
+                        context.go('/jailbreak_detection/confirm');
                       },
                       child: Container(
                         width: 229.01,
@@ -435,6 +507,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Dashboard Image
                   Positioned(
                       left: 62,
                       top: 803,
@@ -449,6 +522,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Dashboard Label
                   const Positioned(
                     left: 43,
                     top: 852.16,
@@ -467,6 +541,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Settings Image
                   Positioned(
                       left: 187,
                       top: 803,
@@ -480,6 +555,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Settings Label
                   const Positioned(
                     left: 182,
                     top: 852,
@@ -498,6 +574,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Profile Image
                   Positioned(
                       left: 315,
                       top: 803,
@@ -511,6 +588,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Profile Label
                   const Positioned(
                     left: 312,
                     top: 852,
@@ -529,12 +607,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
-                  // QR Check
+                  // QR Check Image
                   Positioned(
                     left: 202.15,
                     top: 343,
                     child: InkWell(
-                      onTap: () => print("QR Check Icon pressed"),
+                      onTap: () {
+                        _handleScanQR();},
                       child: Container(
                         width: 229.01,
                         height: 163.76,
@@ -607,23 +686,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  const Positioned(
-                    left: 188.52,
-                    top: 669.31,
-                    child: SizedBox(width: 29.68, height: 29.68),
-                  ),
+
                   Positioned(
                     left: 337.96,
                     top: 59,
-                    child: Container(
-                      width: 44.53,
-                      height: 44.53,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFFBF9F9),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17.12),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 44.53,
+                          height: 44.53,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFFBF9F9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17.12),
+                            ),
+                          ),
                         ),
-                      ),
+                        const Positioned(
+                            left: 11,
+                            top: 7,
+                            child: Image(
+                                image:
+                                    AssetImage('assets/images/bellIcon.png'))),
+                      ],
+                    ),
+                  ),
+
+                  Positioned(
+                    left: 280.96,
+                    top: 59,
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 44.53,
+                          height: 44.53,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFFBF9F9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17.12),
+                            ),
+                          ),
+                        ),
+                        const Positioned(
+                            left: -0.5,
+                            top: 0.5,
+                            child: Image(
+                                image: AssetImage(
+                                    'assets/images/searchButton.png'))),
+                      ],
                     ),
                   ),
                 ],
