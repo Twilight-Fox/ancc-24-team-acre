@@ -13,6 +13,7 @@ import 'src/login_screen.dart';
 import 'src/signup_screen.dart';
 import 'src/dashboard_screen.dart';
 import 'src/settings_screen.dart';
+import 'src/change_password_screen.dart';
 import 'src/profile_screen.dart';
 import 'src/breach_scan/breach_scan_dashboard.dart';
 import 'src/breach_scan/breach_scan_input_screen.dart';
@@ -197,6 +198,10 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) =>
           const ReportsScreen(),
     ),
+    GoRoute(
+        path: '/change_password',
+        builder: (BuildContext context, GoRouterState state) =>
+            const ChangePasswordScreen()),
   ],
 );
 
