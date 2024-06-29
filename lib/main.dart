@@ -14,6 +14,9 @@ import 'src/dashboard_screen.dart';
 import 'src/settings_screen.dart';
 import 'src/profile_screen.dart';
 import 'src/breach_scan/breach_scan_dashboard.dart';
+import 'src/breach_scan/breach_scan_input_screen.dart';
+import 'src/breach_scan/breach_scan_secure_screen.dart';
+import 'src/breach_scan/breach_scan_insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/scanning_screen.dart';
 import 'src/real_time_scanning_and_security_check/secure_screen.dart';
 import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
@@ -55,7 +58,7 @@ class SupabaseState extends ChangeNotifier {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
 
-      print('event: $event, session: $session');
+      //print('event: $event, session: $session');
 
       switch (event) {
         case AuthChangeEvent.signedIn:
@@ -119,6 +122,21 @@ final GoRouter _router = GoRouter(
       path: "/breach_scan/dashboard",
       builder: (BuildContext context, GoRouterState state) =>
           const BreachScanDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/breach_scan/input',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BreachScanInputScreen(),
+    ),
+    GoRoute(
+      path: '/breach_scan/secure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BreachScanSecureScreen(),
+    ),
+    GoRoute(
+      path: '/breach_scan/insecure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const BreachScanInsecureScreen(),
     ),
     GoRoute(
       path: '/real_time_scanning_and_security_check/scanning',
