@@ -19,6 +19,9 @@ import 'src/real_time_scanning_and_security_check/secure_screen.dart';
 import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
 import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
+import 'src/jailbreak_detection/jailbreak_request_screen.dart';
+import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
+import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
 
 // Main Entry Point
 Future<void> main() async {
@@ -108,7 +111,7 @@ final GoRouter _router = GoRouter(
           const SettingsScreen(),
     ),
     GoRoute(
-      path: "/profile",  
+      path: "/profile",
       builder: (BuildContext context, GoRouterState state) =>
           const ProfileScreen(),
     ),
@@ -144,9 +147,24 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/real_time_scanning_and_security_check/scan_history',
-      builder: (BuildContext context, GoRouterState state) => 
+      builder: (BuildContext context, GoRouterState state) =>
           const ScanHistoryScreen(),
     ),
+    GoRoute(
+      path: '/jailbreak_detection/confirm',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakRequestScreen(),
+    ),
+    GoRoute(
+      path: '/jailbreak_detection/secure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakScanSecureScreen(),
+    ),
+    GoRoute(
+      path: '/jailbreak_detection/insecure',
+      builder: (BuildContext context, GoRouterState state) =>
+          const JailbreakScanInsecureScreen(),
+    )
   ],
 );
 

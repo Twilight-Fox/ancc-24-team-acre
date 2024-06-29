@@ -337,7 +337,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     top: 534.91,
                     child: InkWell(
                       onTap: () {
-                        print("Jailbreak Icon pressed");
+                        context.go('/jailbreak_detection/confirm');
                       },
                       child: Container(
                         width: 229.01,
@@ -676,24 +676,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     left: 337.96,
                     top: 59,
                     child: Stack(
-                      children: [Container(
-                        width: 44.53,
-                        height: 44.53,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFFBF9F9),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17.12),
+                      children: [
+                        Container(
+                          width: 44.53,
+                          height: 44.53,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFFBF9F9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17.12),
+                            ),
                           ),
                         ),
-                      ),
-                      const Positioned(
-                        left: 11,
-                        top: 7,
-                        child: Image(
-                          image: AssetImage(
-                            'assets/images/bellIcon.png')
-                          )
-                      ),
+                        const Positioned(
+                            left: 11,
+                            top: 7,
+                            child: Image(
+                                image:
+                                    AssetImage('assets/images/bellIcon.png'))),
                       ],
                     ),
                   ),
@@ -702,24 +701,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     left: 280.96,
                     top: 59,
                     child: Stack(
-                      children: [Container(
-                        width: 44.53,
-                        height: 44.53,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFFBF9F9),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17.12),
+                      children: [
+                        Container(
+                          width: 44.53,
+                          height: 44.53,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFFBF9F9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17.12),
+                            ),
                           ),
                         ),
-                      ),
-                      const Positioned(
-                        left: -0.5,
-                        top: 0.5,
-                        child: Image(
-                          image: AssetImage(
-                            'assets/images/searchButton.png')
-                          )
-                      ),
+                        const Positioned(
+                            left: -0.5,
+                            top: 0.5,
+                            child: Image(
+                                image: AssetImage(
+                                    'assets/images/searchButton.png'))),
                       ],
                     ),
                   ),

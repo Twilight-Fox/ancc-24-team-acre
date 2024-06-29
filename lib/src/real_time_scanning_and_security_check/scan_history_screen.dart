@@ -17,9 +17,9 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
   List<String> url = [];
   List<String> timestamp = [];
   List<String> threatLevel = [];
-  
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadData();
   }
@@ -27,8 +27,8 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
   Future<void> loadData() async {
     final supabase = context.read<SupabaseState>().supabase;
     final result = await supabase
-      .from('url_scan_results')
-      .select('url_link, created_at, ip_quality_rating') ;
+        .from('url_scan_results')
+        .select('url_link, created_at, ip_quality_rating');
 
     // print('Result: $result');
     Map<String, dynamic> cleanedResult = {};
@@ -37,7 +37,8 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
       String urlLink = entry['url_link'];
       // If the URL is not in the map or the current entry is newer, update the map
       if (!cleanedResult.containsKey(urlLink) ||
-          DateTime.parse(entry['created_at']).isAfter(DateTime.parse(cleanedResult[urlLink]!['created_at']))) {
+          DateTime.parse(entry['created_at'])
+              .isAfter(DateTime.parse(cleanedResult[urlLink]!['created_at']))) {
         cleanedResult[urlLink] = entry;
       }
     }
@@ -51,7 +52,6 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
         threatLevel.add(value['ip_quality_rating']);
       });
     });
-    
 
     print('URL: $url');
     print('Timestamp: $timestamp');
@@ -126,31 +126,29 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                   ),
                   color: Color.fromRGBO(241, 241, 241, 1),
                 ))),
-            
         Positioned(
-          top:226,
+          top: 226,
           left: 0,
           child: SizedBox(
-            width:411.4,
-            height:664,
-            child: Column(
-              children: [
-                const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'URL Links',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+            width: 411.4,
+            height: 664,
+            child: Column(children: [
+              const Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'URL Links',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                         color: Color.fromRGBO(91, 91, 91, 1),
                         fontFamily: 'Inter',
                         fontSize: 15.746258735656738,
                         fontWeight: FontWeight.w700,
                         height: 1),
-                    ),
-                    Text(
+                  ),
+                  Text(
                     'Last\nScanned',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -159,31 +157,29 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                         fontSize: 15.746258735656738,
                         fontWeight: FontWeight.w700,
                         height: 1),
-                    ),
-                    Text(
+                  ),
+                  Text(
                     'Threat\nLevels',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color.fromRGBO(91, 91, 91, 1),
-                      fontFamily: 'Inter',
-                      fontSize: 15.746258735656738,
-                      fontWeight: FontWeight.w700,
-                      height: 1),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
+                        color: Color.fromRGBO(91, 91, 91, 1),
+                        fontFamily: 'Inter',
+                        fontSize: 15.746258735656738,
+                        fontWeight: FontWeight.w700,
+                        height: 1),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
                     itemCount: url.length,
                     itemBuilder: (context, index) {
                       return buildScanHistoryRow(index);
                     }),
-                )
-              ]
-            ),
+              )
+            ]),
           ),
         ),
-      
         Positioned(
             top: 115.42189025878906,
             left: 12.558333396911621,
@@ -203,8 +199,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                               topLeft: Radius.circular(20.549999237060547),
                               topRight: Radius.circular(20.549999237060547),
                               bottomLeft: Radius.circular(20.549999237060547),
-                              bottomRight:
-                                  Radius.circular(20.549999237060547),
+                              bottomRight: Radius.circular(20.549999237060547),
                             ),
                             color: Color.fromRGBO(246, 246, 246, 1),
                           ))),
@@ -248,19 +243,19 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                               topLeft: Radius.circular(20.549999237060547),
                               topRight: Radius.circular(20.549999237060547),
                               bottomLeft: Radius.circular(20.549999237060547),
-                              bottomRight:
-                                  Radius.circular(20.549999237060547),
+                              bottomRight: Radius.circular(20.549999237060547),
                             ),
                             color: Color.fromRGBO(246, 246, 246, 1),
                           ))),
                   Positioned(
-                      top: 20.140625,
-                        left: 7.400390625,
-                        child: Transform.scale(
-                        scale: 0.6,
-                        child: SvgPicture.asset('assets/images/deleteicon.svg',
+                    top: 20.140625,
+                    left: 7.400390625,
+                    child: Transform.scale(
+                      scale: 0.6,
+                      child: SvgPicture.asset('assets/images/deleteicon.svg',
                           semanticsLabel: 'deleteicon'),
-                        ),),
+                    ),
+                  ),
                   const Positioned(
                       top: 32,
                       left: 36,
@@ -296,12 +291,10 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                               topLeft: Radius.circular(20.549999237060547),
                               topRight: Radius.circular(20.549999237060547),
                               bottomLeft: Radius.circular(20.549999237060547),
-                              bottomRight:
-                                  Radius.circular(20.549999237060547),
+                              bottomRight: Radius.circular(20.549999237060547),
                             ),
                             color: Color.fromRGBO(246, 246, 246, 1),
                           ))),
-                  
                   const Positioned(
                       top: 27.5,
                       left: 33.6416015625,
@@ -320,7 +313,9 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                   const Positioned(
                       top: 24.96875,
                       left: 12.6416015625,
-                      child: Image(image: AssetImage('assets/images/triangleIcon2.png'),)),
+                      child: Image(
+                        image: AssetImage('assets/images/triangleIcon2.png'),
+                      )),
                 ]))),
         Positioned(
             top: 118.20314025878906,
@@ -341,8 +336,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                               topLeft: Radius.circular(20.549999237060547),
                               topRight: Radius.circular(20.549999237060547),
                               bottomLeft: Radius.circular(20.549999237060547),
-                              bottomRight:
-                                  Radius.circular(20.549999237060547),
+                              bottomRight: Radius.circular(20.549999237060547),
                             ),
                             color: Color.fromRGBO(246, 246, 246, 1),
                           ))),
@@ -391,4 +385,3 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
     );
   }
 }
-
