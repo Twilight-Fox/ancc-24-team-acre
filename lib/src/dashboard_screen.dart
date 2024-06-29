@@ -19,20 +19,17 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final _searchController = TextEditingController();
 
-  
   Future<void> _handleScanQR() async {
     //final supabase = context.read<SupabaseState>().supabase;
     var status = await Permission.camera.request();
-    if (status.isDenied){
+    if (status.isDenied) {
       return;
-    }
-    else {
+    } else {
       var imageStatus = await Permission.photos.request();
-      if (imageStatus.isDenied){
+      if (imageStatus.isDenied) {
         return;
-      }
-      else {
-      context.go('/qr_scan');
+      } else {
+        context.go('/qr_scan');
       }
     }
   }
@@ -100,9 +97,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return;
       } catch (e) {
         print('Error: $e');
-        }
       }
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -438,7 +435,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     top: 534.91,
                     child: InkWell(
                       onTap: () {
-                        print("Reports Icon pressed");
+                        context.go('/reports');
                       },
                       child: Container(
                         width: 229.01,
@@ -619,7 +616,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     top: 343,
                     child: InkWell(
                       onTap: () {
-                        _handleScanQR();},
+                        _handleScanQR();
+                      },
                       child: Container(
                         width: 229.01,
                         height: 163.76,

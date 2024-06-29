@@ -22,18 +22,18 @@ class _BreachScanInputScreenState extends State<BreachScanInputScreen> {
   Future<void> _handleScanEmail() async {
     final supabase = context.read<SupabaseState>().supabase;
     final userID = context.read<SupabaseState>().userID;
-    const denoURL ='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_email';
+    const denoURL =
+        'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_email';
     final anonKey = dotenv.env['SUPABASE_ANON_KEY'];
-    
-    var response = await http.post(Uri.parse(denoURL), 
+
+    var response = await http.post(Uri.parse(denoURL),
         headers: {
           'Authorization': 'Bearer $anonKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
           'email': _emailController.text,
-        })
-    );
+        }));
 
     try {
       var details = jsonDecode(response.body);
@@ -42,16 +42,14 @@ class _BreachScanInputScreenState extends State<BreachScanInputScreen> {
       } else {
         //print(details['exposed'] ? 'Breached' : 'Secure');
         print('a\na\na\na');
-        await supabase
-          .from('breach_scan')
-          .insert([
-            {
-              'user_id': userID,
-              'email': _emailController.text,
-              'last_scanned': DateTime.now().toUtc().toString(),
-              'security': details['exposed'] ? 'Breached' : 'Secure',
-            }
-          ]);
+        await supabase.from('breach_scan').insert([
+          {
+            'user_id': userID,
+            'email': _emailController.text,
+            'last_scanned': DateTime.now().toUtc().toString(),
+            'security': details['exposed'] ? 'Breached' : 'Secure',
+          }
+        ]);
         if (details['exposed']) {
           context.go('/breach_scan/insecure');
         } else {

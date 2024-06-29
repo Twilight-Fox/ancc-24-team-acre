@@ -27,19 +27,20 @@ import 'src/jailbreak_detection/jailbreak_request_screen.dart';
 import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
 import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
 import 'src/qr_scan/screenshot.dart';
+import 'src/report_screen.dart';
 
 // Main Entry Point
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
-  
+
   // Initialise Supabase
   await Supabase.initialize(
     url: 'https://fuewnvhcjyzstbyhyxzh.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ',
   );
-  
+
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => SupabaseState())],
@@ -190,6 +191,11 @@ final GoRouter _router = GoRouter(
       path: '/qr_scan',
       builder: (BuildContext context, GoRouterState state) =>
           const BarcodeScannerWithZoom(),
+    ),
+    GoRoute(
+      path: '/reports',
+      builder: (BuildContext context, GoRouterState state) =>
+          const ReportsScreen(),
     ),
   ],
 );

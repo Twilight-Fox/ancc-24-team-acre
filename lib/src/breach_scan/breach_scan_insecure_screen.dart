@@ -7,7 +7,7 @@ class BreachScanInsecureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFAB00), 
+      backgroundColor: const Color(0xFFFFAB00),
       body: Stack(
         children: [
           const Positioned(

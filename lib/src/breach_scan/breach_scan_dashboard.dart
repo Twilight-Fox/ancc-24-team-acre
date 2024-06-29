@@ -10,7 +10,8 @@ class BreachScanDashboardScreen extends StatefulWidget {
   const BreachScanDashboardScreen({super.key});
 
   @override
-  State<BreachScanDashboardScreen> createState() => _BreachScanDashboardScreenState();
+  State<BreachScanDashboardScreen> createState() =>
+      _BreachScanDashboardScreenState();
 }
 
 class _BreachScanDashboardScreenState extends State<BreachScanDashboardScreen> {
@@ -25,35 +26,35 @@ class _BreachScanDashboardScreenState extends State<BreachScanDashboardScreen> {
   }
 
   Future<void> loadData() async {
-      final supabase = context.read<SupabaseState>().supabase;
-      final result = await supabase
-          .from('breach_scan')
-          .select('email, last_scanned, security');
+    final supabase = context.read<SupabaseState>().supabase;
+    final result = await supabase
+        .from('breach_scan')
+        .select('email, last_scanned, security');
 
-      Map<String, dynamic> cleanedResult = {};
+    Map<String, dynamic> cleanedResult = {};
 
-      for (var entry in result) {
-        String email = entry['email'];
-        // If the URL is not in the map or the current entry is newer, update the map
-        if (!cleanedResult.containsKey(email) ||
-            DateTime.parse(entry['last_scanned'])
-                .isAfter(DateTime.parse(cleanedResult[email]!['last_scanned']))) {
-          cleanedResult[email] = entry;
-        }
+    for (var entry in result) {
+      String email = entry['email'];
+      // If the URL is not in the map or the current entry is newer, update the map
+      if (!cleanedResult.containsKey(email) ||
+          DateTime.parse(entry['last_scanned'])
+              .isAfter(DateTime.parse(cleanedResult[email]!['last_scanned']))) {
+        cleanedResult[email] = entry;
       }
+    }
 
-      setState(() {
-        cleanedResult.forEach((key, value) {
-          email.add(value['email']);
-          timestamp.add(DateTime.parse(value['last_scanned'])
-              .toIso8601String()
-              .split('T')[0]);
-          security.add(value['security']);
-        });
+    setState(() {
+      cleanedResult.forEach((key, value) {
+        email.add(value['email']);
+        timestamp.add(DateTime.parse(value['last_scanned'])
+            .toIso8601String()
+            .split('T')[0]);
+        security.add(value['security']);
       });
-      print(email);
-      print(timestamp);
-      print(security);
+    });
+    print(email);
+    print(timestamp);
+    print(security);
   }
 
   Widget buildScanHistoryRow(int index) {
@@ -70,9 +71,7 @@ class _BreachScanDashboardScreenState extends State<BreachScanDashboardScreen> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(
-          width:40
-        ),
+        const SizedBox(width: 40),
         SizedBox(
           width: 120,
           child: Text(
