@@ -1,11 +1,13 @@
-import 'package:ancc_24_team_acre/src/real_time_scanning_and_security_check/scanning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../main.dart';
+import 'real_time_scanning_and_security_check/scanning_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,6 +18,18 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final _searchController = TextEditingController();
+
+  
+  Future<void> _handleScanQR() async {
+    //final supabase = context.read<SupabaseState>().supabase;
+    var status = await Permission.camera.request();
+    if (status.isDenied){
+      return;
+    }
+    else {
+      //context.go('/qr_scan');
+    }
+  }
 
   Future<void> _handleScanURL() async {
     final URL = _searchController.text;
@@ -76,13 +90,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'status': true
         });
 
-        print('Rating: $rating');
+        //print('Rating: $rating');
         return;
       } catch (e) {
         print('Error: $e');
+        }
       }
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -598,7 +612,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     left: 202.15,
                     top: 343,
                     child: InkWell(
-                      onTap: () => print("QR Check Icon pressed"),
+                      onTap: () {
+                        _handleScanQR();},
                       child: Container(
                         width: 229.01,
                         height: 163.76,
