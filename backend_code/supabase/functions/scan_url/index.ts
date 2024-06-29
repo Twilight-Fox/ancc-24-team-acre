@@ -6,7 +6,7 @@
 import "https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts"
 
 async function _IPScannerAPI(url: string): Promise<{ IPScannerRating: string, IPScannerDescription: string }> {
-  const apiKey = '09jkL3Yyc3p2ymzaIWivmd6a7jcQcZaW'
+  const apiKey = Deno.env.get('IPQUALITYSCORE_API_KEY');
   const encodedURL = encodeURIComponent(url);
   const IPScannerAPI = `https://www.ipqualityscore.com/api/json/url/${apiKey}/${encodedURL}?strictness=0&fast=true`;
   // console.log(IPScannerAPI)
@@ -72,7 +72,7 @@ async function _GoogleSafeBrowsingAPI(url: string) {
   //const encodedExpressions = await hashAndTruncate(sanitisedURL.toString());
   console.log('Encoded Expressions:', encodedExpressions);
 
-  const apiKey = 'AIzaSyAEDsqZgdB0-RQI0LqP3E1MtLlK_qxXjaQ'
+  const apiKey = ''
   const apiURL = `https://safebrowsing.googleapis.com/v5/hashes:search?key=${apiKey}`;
   try {
     const response = await fetch(`${apiURL}&hashPrefixes=WwuJdQ`, {headers: {'Accept': 'application/json'}})
@@ -161,7 +161,7 @@ async function hashAndTruncate(urlComponent: string, truncateToBytes = 4) {
 }
 
 async function _GoogleSafeBrowsingAPIv4(url: string){
-  const apiKey = 'AIzaSyAEDsqZgdB0-RQI0LqP3E1MtLlK_qxXjaQ'
+  const apiKey = ''
   const apiURL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`;
 
   const requestBody = {

@@ -59,37 +59,34 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
   }
 
   Widget buildScanHistoryRow(int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 155,
-            child: Text(
-              url[index],
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 155,
+          child: Text(
+            url[index],
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(
-            width: 90,
-            child: Text(
-              timestamp[index],
-              textAlign: TextAlign.center,
-            ),
+        ),
+        SizedBox(
+          width: 90,
+          child: Text(
+            timestamp[index],
+            textAlign: TextAlign.center,
           ),
-          SizedBox(
-            width: 120,
-            child: Text(
-              threatLevel[index],
-              textAlign: TextAlign.center,
-            ),
+        ),
+        SizedBox(
+          width: 120,
+          child: Text(
+            threatLevel[index],
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
