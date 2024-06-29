@@ -1,5 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'package:http/http.dart' as http;
+
+import '../../main.dart';
 
 class BreachScanInputScreen extends StatefulWidget {
   const BreachScanInputScreen({super.key});
@@ -12,9 +20,48 @@ class _BreachScanInputScreenState extends State<BreachScanInputScreen> {
   final _emailController = TextEditingController();
 
   Future<void> _handleScanEmail() async {
-    print(_emailController.text);
-    //context.go('/breach_scan/secure');
-    context.go('/breach_scan/insecure');
+    final supabase = context.read<SupabaseState>().supabase;
+    final userID = context.read<SupabaseState>().userID;
+    const denoURL ='https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_email';
+    final anonKey = dotenv.env['SUPABASE_ANON_KEY'];
+    
+    var response = await http.post(Uri.parse(denoURL), 
+        headers: {
+          'Authorization': 'Bearer $anonKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': _emailController.text,
+        })
+    );
+
+    try {
+      var details = jsonDecode(response.body);
+      if (details['valid'] == false) {
+        return;
+      } else {
+        //print(details['exposed'] ? 'Breached' : 'Secure');
+        print('a\na\na\na');
+        await supabase
+          .from('breach_scan')
+          .insert([
+            {
+              'user_id': userID,
+              'email': _emailController.text,
+              'last_scanned': DateTime.now().toUtc().toString(),
+              'security': details['exposed'] ? 'Breached' : 'Secure',
+            }
+          ]);
+        if (details['exposed']) {
+          context.go('/breach_scan/insecure');
+        } else {
+          context.go('/breach_scan/secure');
+        }
+      }
+    } catch (e) {
+      print('Failed to load details');
+      return;
+    }
   }
 
   @override

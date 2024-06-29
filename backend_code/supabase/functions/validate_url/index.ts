@@ -4,7 +4,6 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import "https://esm.sh/v135/@supabase/functions-js@2.4.1/src/edge-runtime.d.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 
 function _isValidUrl(urlString: string): string {
   let correctedUrlString = urlString;

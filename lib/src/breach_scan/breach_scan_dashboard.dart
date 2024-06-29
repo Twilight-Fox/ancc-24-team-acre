@@ -1,10 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-class BreachScanDashboardScreen extends StatelessWidget {
+import '../../main.dart';
+
+class BreachScanDashboardScreen extends StatefulWidget {
   const BreachScanDashboardScreen({super.key});
+
+  @override
+  State<BreachScanDashboardScreen> createState() => _BreachScanDashboardScreenState();
+}
+
+class _BreachScanDashboardScreenState extends State<BreachScanDashboardScreen> {
+  List<String> email = [];
+  List<String> timestamp = [];
+  List<String> security = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+      final supabase = context.read<SupabaseState>().supabase;
+      final result = await supabase
+          .from('breach_scan')
+          .select('email, last_scanned, security');
+
+      Map<String, dynamic> cleanedResult = {};
+
+      for (var entry in result) {
+        String email = entry['email'];
+        // If the URL is not in the map or the current entry is newer, update the map
+        if (!cleanedResult.containsKey(email) ||
+            DateTime.parse(entry['last_scanned'])
+                .isAfter(DateTime.parse(cleanedResult[email]!['last_scanned']))) {
+          cleanedResult[email] = entry;
+        }
+      }
+
+      setState(() {
+        cleanedResult.forEach((key, value) {
+          email.add(value['email']);
+          timestamp.add(DateTime.parse(value['last_scanned'])
+              .toIso8601String()
+              .split('T')[0]);
+          security.add(value['security']);
+        });
+      });
+      print(email);
+      print(timestamp);
+      print(security);
+  }
+
+  Widget buildScanHistoryRow(int index) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 125,
+          child: Text(
+            email[index],
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(
+          width:40
+        ),
+        SizedBox(
+          width: 120,
+          child: Text(
+            timestamp[index],
+            textAlign: TextAlign.left,
+          ),
+        ),
+        SizedBox(
+          width: 110,
+          child: Text(
+            security[index],
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +139,14 @@ class BreachScanDashboardScreen extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   height: 1),
             )),
-        const Positioned(
+        Positioned(
           top: 285,
           child: SizedBox(
             width: 400,
             height: 500,
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +178,7 @@ class BreachScanDashboardScreen extends StatelessWidget {
                     Text(
                       'status',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color.fromRGBO(91, 91, 91, 1),
                         fontFamily: 'Inter',
                         fontSize: 17.125,
@@ -103,6 +188,14 @@ class BreachScanDashboardScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: email.length,
+                    itemBuilder: (context, index) {
+                      return buildScanHistoryRow(index);
+                    },
+                  ),
                 ),
               ],
             ),
