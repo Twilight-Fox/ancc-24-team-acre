@@ -18,6 +18,7 @@ import 'src/real_time_scanning_and_security_check/scanning_screen.dart';
 import 'src/real_time_scanning_and_security_check/secure_screen.dart';
 import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
+import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
 
 // Main Entry Point
 Future<void> main() async {
@@ -107,7 +108,7 @@ final GoRouter _router = GoRouter(
           const SettingsScreen(),
     ),
     GoRoute(
-      path: "/profile",
+      path: "/profile",  
       builder: (BuildContext context, GoRouterState state) =>
           const ProfileScreen(),
     ),
@@ -140,7 +141,12 @@ final GoRouter _router = GoRouter(
       path: '/real_time_scanning_and_security_check/threat_details',
       builder: (BuildContext context, GoRouterState state) =>
           const ThreatDetailsScreen(),
-    )
+    ),
+    GoRoute(
+      path: '/real_time_scanning_and_security_check/scan_history',
+      builder: (BuildContext context, GoRouterState state) => 
+          const ScanHistoryScreen(),
+    ),
   ],
 );
 

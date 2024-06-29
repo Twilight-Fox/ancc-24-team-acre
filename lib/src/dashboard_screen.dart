@@ -98,6 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: const BoxDecoration(color: Color(0xFFFFAB00)),
               child: Stack(
                 children: [
+                  // White Rounded Background
                   Positioned(
                     left: 0,
                     top: 139,
@@ -113,6 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Bottom Naviagtion Bar
                   Positioned(
                     left: -2,
                     top: 770,
@@ -128,6 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Search Text Form Field
                   Positioned(
                       left: 24,
                       top: 59,
@@ -138,14 +141,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(17.13),
+                              borderSide: BorderSide.none,
                             ),
                             labelText: 'Search',
+                            labelStyle: const TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 17.13,
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(210, 210, 210, 1)),
                             fillColor: Colors.white,
                             filled: true,
                           ),
                         ),
                       )),
 
+                  // Real-Time Scan & Security Check Text Form Field
                   Positioned(
                     left: 14,
                     top: 247.85,
@@ -180,14 +190,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
-                  const Positioned(
+                  // Scan History Button
+                  Positioned(
                       left: 259,
                       top: 254.85,
-                      child: Image(
-                          image:
-                              AssetImage('assets/images/historyButton.png'))),
+                      child: InkWell(
+                        onTap: () {
+                          context.go(
+                              '/real_time_scanning_and_security_check/scan_history');
+                        },
+                        child: const Image(
+                            image:
+                                AssetImage('assets/images/historyButton.png')),
+                      )),
 
-                  // Real-Time Scan & Security Check
+                  // Real-Time Scan & Security Check Button
                   Positioned(
                       left: 303.06,
                       top: 243.85,
@@ -213,6 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             )),
                       )),
 
+                  // Real-Time Scan & Security Check Label
                   const Positioned(
                     left: 26,
                     top: 221,
@@ -475,6 +493,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Dashboard Image
                   Positioned(
                       left: 62,
                       top: 803,
@@ -489,6 +508,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Dashboard Label
                   const Positioned(
                     left: 43,
                     top: 852.16,
@@ -507,6 +527,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Settings Image
                   Positioned(
                       left: 187,
                       top: 803,
@@ -520,6 +541,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Settings Label
                   const Positioned(
                     left: 182,
                     top: 852,
@@ -538,6 +560,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Profile Image
                   Positioned(
                       left: 315,
                       top: 803,
@@ -551,6 +574,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 37.83,
                           ))),
 
+                  // Profile Label
                   const Positioned(
                     left: 312,
                     top: 852,
@@ -569,7 +593,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
-                  // QR Check
+                  // QR Check Image
                   Positioned(
                     left: 202.15,
                     top: 343,
@@ -647,23 +671,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  const Positioned(
-                    left: 188.52,
-                    top: 669.31,
-                    child: SizedBox(width: 29.68, height: 29.68),
-                  ),
+
                   Positioned(
                     left: 337.96,
                     top: 59,
-                    child: Container(
-                      width: 44.53,
-                      height: 44.53,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFFBF9F9),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17.12),
+                    child: Stack(
+                      children: [Container(
+                        width: 44.53,
+                        height: 44.53,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFFBF9F9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17.12),
+                          ),
                         ),
                       ),
+                      const Positioned(
+                        left: 11,
+                        top: 7,
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/bellIcon.png')
+                          )
+                      ),
+                      ],
+                    ),
+                  ),
+
+                  Positioned(
+                    left: 280.96,
+                    top: 59,
+                    child: Stack(
+                      children: [Container(
+                        width: 44.53,
+                        height: 44.53,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFFBF9F9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17.12),
+                          ),
+                        ),
+                      ),
+                      const Positioned(
+                        left: -0.5,
+                        top: 0.5,
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/searchButton.png')
+                          )
+                      ),
+                      ],
                     ),
                   ),
                 ],
