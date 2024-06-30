@@ -243,6 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
                                 decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFFFFAB00),
                                 height: 0,
                               ),
                             ),

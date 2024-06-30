@@ -4,11 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 
 class InsecureScreen extends StatelessWidget {
+  final String url;
   final String rating;
   final String description;
 
   const InsecureScreen(
-      {super.key, required this.rating, required this.description});
+      {super.key, required this.rating, required this.description, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +143,7 @@ class InsecureScreen extends StatelessWidget {
                 left: 284,
                 child: InkWell(
                   onTap: () {
-                    context.go('/report_website');
+                    context.go('/report_website', extra: url);
                   },
                   child: const Text(
                     '     report',

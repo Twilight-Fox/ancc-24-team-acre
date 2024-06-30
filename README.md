@@ -5,6 +5,3 @@
 ### Dependencies
 
 This application requires the following dependencies:
-
-* **Docker:** [Docker website](https://www.docker.com/) (Docker Desktop)
-* **Deno:** [Deno website](https://deno.land/) (Deno v1.44.1)

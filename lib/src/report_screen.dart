@@ -25,8 +25,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Future<void> loadData() async {
     final supabase = context.read<SupabaseState>().supabase;
+    final userID = context.read<SupabaseState>().userID;
     final scanResults =
-        await supabase.from('url_scan_results').select('ip_quality_rating');
+        await supabase.from('url_scan_results').select('ip_quality_rating').eq('user_id', userID!);
     //print(scanResults);
 
     int secureCount = 0;

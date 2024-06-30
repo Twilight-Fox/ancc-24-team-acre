@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -43,8 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/validate_url';
     const scanURL =
         'https://fuewnvhcjyzstbyhyxzh.supabase.co/functions/v1/scan_url';
-    const anonKey =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ';
+    final anonKey =dotenv.env['SUPABASE_ANON_KEY'];
 
     var response = await http.post(Uri.parse(denoURL),
         headers: {
@@ -78,10 +78,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         // Call appropriate screen based on the rating
         if (rating == 'Secure') {
-          context.go('/real_time_scanning_and_security_check/secure');
+          context.go('/real_time_scanning_and_security_check/secure', extra:{"url": sanitisedURL});
         } else {
+          //context.go('/real_time_scanning_and_security_check/secure',
+          //    extra: sanitisedURL);
           context.go('/real_time_scanning_and_security_check/insecure',
-              extra: {'rating': rating, 'description': description});
+              extra: {'rating': rating, 'description': description, 'url': sanitisedURL});
         }
 
         // Insert into database

@@ -25,6 +25,7 @@ import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
 import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
 import 'src/report_website_screen.dart';
+import 'src/report_result_screen.dart';
 import 'src/jailbreak_detection/jailbreak_request_screen.dart';
 import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
 import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
@@ -39,8 +40,7 @@ Future<void> main() async {
   // Initialise Supabase
   await Supabase.initialize(
     url: 'https://fuewnvhcjyzstbyhyxzh.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1ZXdudmhjanl6c3RieWh5eHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMDY2NzMsImV4cCI6MjAzMzU4MjY3M30.GQi3uTIxslY1CAPIOxm0x5o78rLkF3_XPtb6bREu9XQ',
+    anonKey:dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
   runApp(
@@ -153,7 +153,8 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/real_time_scanning_and_security_check/secure',
       builder: (BuildContext context, GoRouterState state) {
-        return const SecureScreen();
+        final url = state.extra as String?;
+        return SecureScreen(url: url??'');
       },
     ),
     GoRoute(
@@ -162,7 +163,8 @@ final GoRouter _router = GoRouter(
           final data = state.extra as Map<String, String>;
           final rating = data['rating'] ?? '';
           final description = data['description'] ?? '';
-          return InsecureScreen(rating: rating, description: description);
+          final url = data['url'] ?? '';
+          return InsecureScreen(rating: rating, description: description, url: url,);
         }),
     GoRoute(
       path: '/real_time_scanning_and_security_check/threat_details',
@@ -176,8 +178,15 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/report_website',
-      builder: (BuildContext context, GoRouterState state) => 
-          const ReportWebsiteScreen()
+      builder: (BuildContext context, GoRouterState state) {
+          final url = state.extra as String?;
+            return ReportWebsiteScreen(url: url ?? '');
+      }
+    ),
+    GoRoute(
+      path: '/report_result',
+      builder: (BuildContext context, GoRouterState state) =>
+        const ScanResultScreen()
     ),
     GoRoute(
       path: '/jailbreak_detection/confirm',

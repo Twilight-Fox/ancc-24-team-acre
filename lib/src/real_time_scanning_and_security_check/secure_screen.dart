@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
 class SecureScreen extends StatelessWidget {
-  const SecureScreen({super.key});
+  final String url;
+
+  const SecureScreen({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -176,23 +178,26 @@ class SecureScreen extends StatelessWidget {
                 child: Image(
                   image: AssetImage('assets/images/triangleIcon.png'),
                 )),
-            const Positioned(
+            Positioned(
               left: 284,
               top: 784,
-              child: SizedBox(
-                width: 130.82,
-                height: 33.40,
-                child: Text(
-                  '     report',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.88,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Color.fromRGBO(255, 255, 255, 1),
-                    decorationThickness: 1.5,
-                    height: 0,
+              child: InkWell(
+                onTap: (){context.go('/report_website', extra: url);},
+                child: const SizedBox(
+                  width: 130.82,
+                  height: 33.40,
+                  child: Text(
+                    '     report',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.88,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Color.fromRGBO(255, 255, 255, 1),
+                      decorationThickness: 1.5,
+                      height: 0,
+                    ),
                   ),
                 ),
               ),

@@ -1,13 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
-class ReportWebsiteScreen extends StatelessWidget {
-  const ReportWebsiteScreen({super.key});
+import '../main.dart';
+
+class ReportWebsiteScreen extends StatefulWidget {
+  final String url;
+  
+  const ReportWebsiteScreen({super.key, required this.url});
+
+  @override
+  State<ReportWebsiteScreen> createState() => _ReportWebsiteScreenState();
+}
+
+class _ReportWebsiteScreenState extends State<ReportWebsiteScreen> {
+  Map<String, bool> checkboxValues = {
+    "phishing": false,
+    "invalid domain": false,
+    "malware": false,
+    "copyright infringement": false,
+    "spam": false,
+    "piracy": false,
+    "illegal content": false,
+  };
+
+  Future<void> _handleReport() async {
+    final supabase = context.read<SupabaseState>().supabase;
+
+    String selectedCategories = '';
+    checkboxValues.forEach((key, value) {
+      if (value) {
+      selectedCategories += '$key, ';
+      }
+    });
+    if (selectedCategories != ''){
+      selectedCategories = selectedCategories.substring(0, selectedCategories.length - 2);
+    } 
+    //print(selectedCategories);
+    await supabase
+        .from('community_reports')
+        .insert([
+        { "website_url": widget.url, 'categories': selectedCategories},
+        ]);
+    context.go('/report_result');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          const Positioned(
+            left:35,
+            top:55,
+            child: Image(
+              image: AssetImage(
+                'assets/images/leftArrowIcon.png'
+              ),
+            )
+          ),
+
           const Positioned(
             left: 163,
             top: 61,
@@ -38,7 +90,7 @@ class ReportWebsiteScreen extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 19.52,
                   fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w900,
                   height: 0,
                 ),
               ),
@@ -46,7 +98,7 @@ class ReportWebsiteScreen extends StatelessWidget {
           ),
           const Positioned(
             left: 62,
-            top: 281,
+            top: 305,
             child: SizedBox(
               width: 280,
               height: 469,
@@ -62,144 +114,115 @@ class ReportWebsiteScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+            Positioned(
             left: 334,
             top: 283,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['phishing'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['phishing'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 331,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['invalid domain'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['invalid domain'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 379,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['malware'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['malware'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 427,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['copyright infringement'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['copyright infringement'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 475,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['spam'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['spam'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 523,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['piracy'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['piracy'] = value ?? false;
+                });
+              },
             ),
-          ),
-          Positioned(
+            ),
+            Positioned(
             left: 334,
             top: 571,
-            child: Container(
-              width: 16.90,
-              height: 16.90,
-              decoration: ShapeDecoration(
-                color: const Color(0x00F1F1F1),
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1.30),
-                  borderRadius: BorderRadius.circular(3.90),
-                ),
-              ),
+            child: Checkbox(
+              value: checkboxValues['illegal content'],
+              onChanged: (bool? value) {
+                setState(() {
+                  checkboxValues['illegal content'] = value ?? false;
+                });
+              },
             ),
-          ),
+            ),
           Positioned(
             left: 93,
             top: 750,
-            child: Container(
-              width: 226,
-              height: 67,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFFFAB00),
+            child: ElevatedButton(
+              onPressed: () {
+                _handleReport();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFAB00), // Button color
+                foregroundColor: Colors.white, // Text color
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(29),
                 ),
+                fixedSize: const Size(226, 67),
               ),
-            ),
-          ),
-          const Positioned(
-            left: 26,
-            top: 769,
-            child: SizedBox(
-              width: 359.62,
-              height: 43.38,
-              child: Text(
+              child: const Text(
                 'REPORT',
-                textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
                   fontSize: 27.40,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,
-                  height: 0,
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );

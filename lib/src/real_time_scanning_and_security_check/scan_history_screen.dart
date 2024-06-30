@@ -26,9 +26,11 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
 
   Future<void> loadData() async {
     final supabase = context.read<SupabaseState>().supabase;
+    final userID = context.read<SupabaseState>().userID;
     final result = await supabase
         .from('url_scan_results')
-        .select('url_link, created_at, ip_quality_rating');
+        .select('url_link, created_at, ip_quality_rating')
+        .eq('user_id', userID!);
 
     // print('Result: $result');
     Map<String, dynamic> cleanedResult = {};
