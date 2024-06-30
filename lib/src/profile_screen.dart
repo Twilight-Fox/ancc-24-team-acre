@@ -1,11 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
+import '../main.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  List<String> username = [];
+  List<String> email = [];
+
+  @override
+  void initState() {
+    super.initState(){
+      loadData();
+    }
+  }
+
+  Future<void> loadData() async{
+  final supabase = context.read<SupabaseState>().supabase;
+  final userID = context.read<SupabaseState>().userID;
+  }
+
+   void _handleLogOut() async {
+    final supabase = context.read<SupabaseState>().supabase;
+    supabase.auth.signOut();
+  }
+
   Widget build(BuildContext context) {
     // Figma Flutter Generator Profile_screenWidget - FRAME
     return Scaffold(
@@ -220,7 +248,7 @@ class ProfileScreen extends StatelessWidget {
             height: 54,
             child: ElevatedButton(
               onPressed: () {
-                print("LOG OUT BUTTON PRESSED");
+                _handleLogOut();
               },
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
