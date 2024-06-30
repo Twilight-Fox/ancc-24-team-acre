@@ -22,22 +22,22 @@ migrate_working_dir/
 #.vscode/
 
 # Irrelevant Development Platforms
-ios
-linux
-macos
-web
-windows
+frontend_code/ios
+frontend_code/linux
+frontend_code/macos
+frontend_code/web
+frontend_code/windows
 
 # Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-devtools_options.yaml
+frontend_code/**/doc/api/
+frontend_code/**/ios/Flutter/.last_build_id
+frontend_code/.dart_tool/
+frontend_code/.flutter-plugins
+frontend_code/.flutter-plugins-dependencies
+frontend_code/.pub-cache/
+frontend_code/.pub/
+frontend_code/build/
+frontend_code/devtools_options.yaml
 
 # Supabase related
 backend_code/supabase/.branches
@@ -45,13 +45,13 @@ backend_code/supabase/.temp
 backend_code/supabase/.env
 
 # Symbolication related
-app.*.symbols
+frontend_code/app.*.symbols
 
 # Obfuscation related
-app.*.map.json
+frontend_code/app.*.map.json
 
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+frontend_code/android/app/debug
+frontend_code/android/app/profile
+frontend_code/android/app/release
 
