@@ -12,6 +12,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
   void showDeleteConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -22,17 +23,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                // Code to delete the item goes here
-                Navigator.of(context).pop(); // Close the dialog
+                
                 final supabase = context.read<SupabaseState>().supabase;
                 final userID = context.read<SupabaseState>().userID;
+                print(userID);
 
                 if (userID == null) {
+                  Navigator.of(context).pop(); 
                   return;
                 } else {
                   await supabase.from('profiles').delete().eq('id', userID);
+                  await supabase.auth.signOut();
+                  context.go('/');
                 }
-                Navigator.of(context).pop();
               },
               child: const Text('DELETE'),
             ),
