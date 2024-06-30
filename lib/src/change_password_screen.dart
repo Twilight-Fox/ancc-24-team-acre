@@ -34,7 +34,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final supabase = context.read<SupabaseState>().supabase;
     await supabase.auth.updateUser(UserAttributes(password: password));
     //print('password changed');  
-    supabase.auth.signOut()
     context.go('/dashboard');
   }
 

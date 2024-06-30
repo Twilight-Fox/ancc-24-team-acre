@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
 
@@ -14,24 +13,37 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
-  List<String> username = [];
-  List<String> email = [];
+  String _username = 'username';
+  String _email = 'email';
 
   @override
   void initState() {
-    super.initState(){
+    super.initState();
       loadData();
-    }
   }
 
   Future<void> loadData() async{
   final supabase = context.read<SupabaseState>().supabase;
   final userID = context.read<SupabaseState>().userID;
+
+  if (userID == null) {
+    return;
+  }
+  var response = await supabase
+    .from('profiles')
+    .select('username, email')
+    .eq('id', userID);
+
+  setState(() {
+    _username = response[0]['username'];
+    _email = response[0]['email'];
+  });
   }
 
-   void _handleLogOut() async {
+  void _handleLogOut() async {
     final supabase = context.read<SupabaseState>().supabase;
     supabase.auth.signOut();
+    context.go('/');
   }
 
   Widget build(BuildContext context) {
@@ -108,18 +120,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ]))),
         const Positioned(
             top: 332,
-            left: 272,
+            left: 302,
             child: Image(
               image: AssetImage('assets/images/editIcon.png'),
             )),
-        const Positioned(
+        Positioned(
             top: 330.300048828125,
-            left: 136.1748046875,
+            left: 120.1748046875,
             child: Text(
-              'Username',
+              _username,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 1),
+              style: const TextStyle(
+                  color:  Color.fromRGBO(0, 0, 0, 1),
                   fontFamily: 'Inter',
                   fontSize: 27.399999618530273,
                   letterSpacing:
@@ -127,13 +139,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontWeight: FontWeight.normal,
                   height: 1),
             )),
-        const Positioned(
+        Positioned(
             top: 381.675048828125,
-            left: 143.5751953125,
+            left: 125.5751953125,
             child: Text(
-              'email address',
+              _email,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
                   fontFamily: 'Inter',
                   fontSize: 18.266666412353516,

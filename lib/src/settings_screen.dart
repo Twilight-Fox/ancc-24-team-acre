@@ -57,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
                         bottomLeft: Radius.circular(43.383331298828125),
                         bottomRight: Radius.circular(43.383331298828125),
                       ),
-                      color: Color.fromRGBO(241, 241, 241, 1),
+                      color: Color.fromRGBO(255, 255, 255, 1),
                     ))),
             Positioned(
                 top: 770,

@@ -123,7 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       width: 411,
                       height: 806,
                       decoration: ShapeDecoration(
-                        color: const Color(0xFFF1F1F1),
+                        color: const Color.fromARGB(255, 255, 255, 255),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(43.38),
                         ),
