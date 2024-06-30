@@ -51,7 +51,10 @@ This application requires the following dependencies:
 > ```console
 > $ flutter pub get
 > ```
-> 4. Create your .env file and insert your API Keys
+> 4. Create your .env file and insert your API Keys in root
+> ```console
+> $ touch .env
+> ```
 > 5. Run the program
 > ```console
 > $ flutter run
