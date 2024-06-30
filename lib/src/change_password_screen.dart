@@ -33,7 +33,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
     final supabase = context.read<SupabaseState>().supabase;
     await supabase.auth.updateUser(UserAttributes(password: password));
-    //print('password changed');  
+    //print('password changed');
     context.go('/dashboard');
   }
 
@@ -54,9 +54,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     height: 616,
                     decoration: const BoxDecoration(
                       color: Color.fromRGBO(255, 171, 0, 1),
-                      borderRadius: BorderRadius.all(Radius.elliptical(614, 616)),
+                      borderRadius:
+                          BorderRadius.all(Radius.elliptical(614, 616)),
                     ))),
-            
             Positioned(
               top: 468.31298828125,
               left: 9,
@@ -89,11 +89,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       fontWeight: FontWeight.normal,
                     ),
                     contentPadding: EdgeInsets.only(
-                      left:
-                          36.89892578125,
-                      bottom: 11, 
-                      top: 15
-                    ),
+                        left: 36.89892578125, bottom: 11, top: 15),
                   ),
                   style: const TextStyle(
                     color: Colors.black,
@@ -103,7 +99,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
             ),
-            
             Positioned(
               top: 333,
               left: 9,
@@ -136,11 +131,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       fontWeight: FontWeight.normal,
                     ),
                     contentPadding: EdgeInsets.only(
-                      left:
-                          35.50439453125, 
-                      bottom: 11, 
-                      top: 15
-                    ),
+                        left: 35.50439453125, bottom: 11, top: 15),
                   ),
                   style: const TextStyle(
                     color: Colors.black,
@@ -153,12 +144,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             const Positioned(
                 top: 354.4951171875,
                 left: 329.35595703125,
-                child: Image(image: AssetImage('assets/images/decryptButton.png'))),
+                child: Image(
+                    image: AssetImage('assets/images/decryptButton.png'))),
             const Positioned(
                 top: 486.4580078125,
                 left: 329.35595703125,
-                child: Image(image: AssetImage('assets/images/decryptButton.png'))),
-            
+                child: Image(
+                    image: AssetImage('assets/images/decryptButton.png'))),
             const Positioned(
                 top: 99,
                 left: 23,
@@ -202,26 +194,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       fontWeight: FontWeight.normal,
                       height: 1),
                 )),
-              Positioned(
-                left: 105,
-                top: 660,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _handleChangePassword();
-                  },
-                  child: Text('CHANGE'),
-                  style: ElevatedButton.styleFrom(
+            Positioned(
+              left: 105,
+              top: 660,
+              child: ElevatedButton(
+                onPressed: () {
+                  _handleChangePassword();
+                },
+                child: Text('CHANGE'),
+                style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(255, 171, 0, 1),
                     foregroundColor: Color.fromARGB(255, 255, 255, 255),
                     textStyle: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
-                    fixedSize: Size(192, 92)
-                  
-                  ),
-                ),
+                    fixedSize: Size(192, 92)),
               ),
+            ),
           ]),
         ),
       ),

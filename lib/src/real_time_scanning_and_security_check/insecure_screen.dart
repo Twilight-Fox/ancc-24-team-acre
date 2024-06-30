@@ -137,20 +137,28 @@ class InsecureScreen extends StatelessWidget {
                       decorationColor: Color.fromRGBO(222, 18, 18, 1),
                       height: 1),
                 )),
-            const Positioned(
+            Positioned(
                 top: 784,
                 left: 284,
-                child: Text(
-                  '     report',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      fontFamily: 'Inter',
-                      fontSize: 20.875001907348633,
-                      letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1),
+                child: InkWell(
+                  onTap: () {
+                    context.go('/report_website');
+                  },
+                  child: const Text(
+                    '     report',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                        fontFamily: 'Inter',
+                        fontSize: 20.875001907348633,
+                        letterSpacing:
+                            0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white,
+                        ),
+                  ),
                 )),
             Positioned(
                 top: 784.84375,

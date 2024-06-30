@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../main.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -21,18 +22,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           content: const Text('Are you sure you want to delete your account?'),
           actions: <Widget>[
             TextButton(
-              onPressed: () async {
-                // Code to delete the item goes here
+              onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 final supabase = context.read<SupabaseState>().supabase;
                 final userID = context.read<SupabaseState>().userID;
-
-                if (userID == null) {
-                  return;
-                } else {
-                  await supabase.from('profiles').delete().eq('id', userID);
-                }
-                Navigator.of(context).pop();
               },
               child: const Text('DELETE'),
             ),

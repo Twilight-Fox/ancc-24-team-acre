@@ -12,32 +12,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   String _username = 'username';
   String _email = 'email';
 
   @override
   void initState() {
     super.initState();
-      loadData();
+    loadData();
   }
 
-  Future<void> loadData() async{
-  final supabase = context.read<SupabaseState>().supabase;
-  final userID = context.read<SupabaseState>().userID;
+  Future<void> loadData() async {
+    final supabase = context.read<SupabaseState>().supabase;
+    final userID = context.read<SupabaseState>().userID;
 
-  if (userID == null) {
-    return;
-  }
-  var response = await supabase
-    .from('profiles')
-    .select('username, email')
-    .eq('id', userID);
+    if (userID == null) {
+      return;
+    }
+    var response = await supabase
+        .from('profiles')
+        .select('username, email')
+        .eq('id', userID);
 
-  setState(() {
-    _username = response[0]['username'];
-    _email = response[0]['email'];
-  });
+    setState(() {
+      _username = response[0]['username'];
+      _email = response[0]['email'];
+    });
   }
 
   void _handleLogOut() async {
@@ -131,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _username,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  color:  Color.fromRGBO(0, 0, 0, 1),
+                  color: Color.fromRGBO(0, 0, 0, 1),
                   fontFamily: 'Inter',
                   fontSize: 27.399999618530273,
                   letterSpacing:

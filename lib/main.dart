@@ -24,6 +24,7 @@ import 'src/real_time_scanning_and_security_check/secure_screen.dart';
 import 'src/real_time_scanning_and_security_check/insecure_screen.dart';
 import 'src/real_time_scanning_and_security_check/threat_details_screen.dart';
 import 'src/real_time_scanning_and_security_check/scan_history_screen.dart';
+import 'src/report_website_screen.dart';
 import 'src/jailbreak_detection/jailbreak_request_screen.dart';
 import 'src/jailbreak_detection/jailbreak_secure_screen.dart';
 import 'src/jailbreak_detection/jailbreak_insecure_screen.dart';
@@ -172,6 +173,11 @@ final GoRouter _router = GoRouter(
       path: '/real_time_scanning_and_security_check/scan_history',
       builder: (BuildContext context, GoRouterState state) =>
           const ScanHistoryScreen(),
+    ),
+    GoRoute(
+      path: '/report_website',
+      builder: (BuildContext context, GoRouterState state) => 
+          const ReportWebsiteScreen()
     ),
     GoRoute(
       path: '/jailbreak_detection/confirm',
