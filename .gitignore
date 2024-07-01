@@ -38,6 +38,7 @@ frontend_code/.pub-cache/
 frontend_code/.pub/
 frontend_code/build/
 frontend_code/devtools_options.yaml
+frontend_code/.env
 
 # Supabase related
 backend_code/supabase/.branches
