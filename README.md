@@ -53,6 +53,7 @@ This application requires the following dependencies:
 > ```
 > 4. Create your .env file and insert your API Keys in root
 > ```console
+> $ cd frontend_code
 > $ touch .env
 > ```
 > 5. Run the program
